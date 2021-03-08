@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jx-payments
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 80080
+  selector:
+    app: jx-payments
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jx-payments
+spec:
+  selector:
+    matchLabels:
+      app: jx-payments
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jx-payments
+    spec:
+      containers:
+      - image: jx-payments
+        name: jx-payments
+        ports:
+        - containerPort: 8080
